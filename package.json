@@ -1,0 +1,9 @@
+{
+  "name": "Deployed-Contracts",
+  "version": "1.0.0",
+  "description": "This is a public repository containing all contracts ever deployed by Project Lambo.",
+  "main": "index.js",
+  "repository": "git@github.com:Project-Lambo/Deployed-Contracts.git",
+  "author": "abdullahsuleman <abdullahsuleman61@gmail.com>",
+  "license": "MIT"
+}
