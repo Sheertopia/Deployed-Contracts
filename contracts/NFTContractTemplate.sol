@@ -10,7 +10,7 @@ interface IVoting {
     function getFinalizedSupply() external view returns (uint256);
 }
 
-contract ZeusPepe721A is ERC721A, ERC2981 {
+contract NFTContractTemplate is ERC721A, ERC2981 {
     uint256 public startTokenId = 20001; // <== Must add here. Needed in 721A
     string private baseTokenURI =
         "https://api.projectlambo.com/metadata/goerli/";
