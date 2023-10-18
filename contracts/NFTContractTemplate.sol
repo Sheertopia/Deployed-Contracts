@@ -13,7 +13,7 @@ interface IVoting {
 contract NFTContractTemplate is ERC721A, ERC2981 {
     uint256 public startTokenId = 20001; // <== Must add here. Needed in 721A
     string private baseTokenURI =
-        "https://api.projectlambo.com/metadata/goerli/";
+        "https://api.projectlambo.com/metadata/ethereum/";
     uint256 public maxSupplyFreeNFTs = 420;
     uint256 public mintPriceInWei = 100 wei;
     uint96 public royaltyFeesInBips = 250; // 2.5%
