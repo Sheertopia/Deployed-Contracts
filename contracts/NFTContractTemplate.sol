@@ -1,5 +1,60 @@
+//                                 *@ @@@@@@@@@@ @#
+//                            @@, @  %@@@/@ @@@@@@@@@@@@
+//                      ./@# &@@%@@&&@@@@@%@@          &(@@@#*
+//                   /#@@@@@@@@@@@@@@@@@@@@@@@@@@&,@@@@@@&@@@@@&
+//                 &@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@(
+//               *@@@@@@@@@@@@@@@@@@@@@@@@.,@@@@@@@@@@@@@@@@@@@@@@@@,
+//             *@@* *@@@@@@@*#*@@@@@@@@@@@@ &@@@@@@@@@@@*#@@@@@@@@@@@@#
+//            /@/ # #@@@/,         .(/@*,*    ,*#(*         (%@(@@@@@@@(
+//            @*  @&*@(                                       *@@@@@@@@@,
+//          .@@#   &/%/                                        @@*@@@@@@@/
+//         (@@.    ./  /@//    (@                    (&    (#(( /@@@@@@/@@*
+//         *@@  (@@@@&/     *@((@(                  %@@.%(     /#@@@@@@@@@.
+//         (@ %@@@@@@/ *&(    ,&@@&,             **@@@&    *#@/ &@@@@@@@/@.
+//         (@,@@@@@@&#.    .#&. *@@@@@@&%%,,,@@@@@@@#  (%(     #%@@@@@@@@@.
+//         *@@@@@@@@@@@@      (*  ./@@@@@@@@@@@@@ @*         .&@@@@@@@@@@@.
+//         (@@@@@@@@@@@@&(         *..%.&@@&%//&.#         %@@@@@@@@@@@@@@&
+//          .@@@@@@@@@@@@@@@.                           (@@@@@@@@@@@@@@@@
+//            @@@@@@@@@@@@@       ,   @@#        @#       @@@@@@@@@@@@@@,
+//            .@@@@@@@@@@#          (@@& / @@@ @            #@@@@@@@@@@/
+//             #@@@@@@%               @.@/@@@#@,                .@@@@@*
+//                @,                 &    &&    &               &&@@.
+//                 ,@@.               @%      (@             .@@@@(
+//                   (@@@(* %          .   ,@%           (%@@@@@#
+//                      %@@@@,         #@&@@%         %&@@@@@%
+//                          #/@@*        .,##      #@@@@##
+//                                           (    #/
+
+// //////((   //////,(/      /(///(,         //// .////////    /(///(*   */////////
+// @@@@@@@@@@ @@@@@@@@@@( (@@@@@@@@@@/       @@@@ *@@@@@@@@ /@@@@@@@@@@# @@@@@@@@@@
+// @@@(/,.@@@@@@@@*,.@@@&#@@@#     @@@@      @@@@ *@@@,,,, &@@@@    #,,,(   /@@@*
+// @@@@@@@@&# @@@@@@@@@, *@@@.    .@@@@&     @@@@ *@@@@@@@ &@@@             /@@@*
+// @@@*.      @@@@%@@@@@  (@@@@..@@@@@@.@@@,.@@@  *@@@%%%%% /@@@@..%@@@@%   /@@@*
+// @@@*.      @@@@  *@@@,   .@@@@@@&*   *&@@@@@#  *@@@@@@@@   *&@@@@@&&     /@@@*
+
+//               %@&       ,@@#    #@@@    @@@(  @@@@@@#   &@@@@@@@%
+//               %@&      /@@.@(   #@,@.  ,@@@(  @@/  @@/  @*     /@
+//               %@&     (@@../@%  #@@ @((@ @@(  @@(..@@(  @*     /@
+//               %@@&&&%#@@,   #@@ #@@ &@@% @@(  @@&&@@%/  ,@@@&@@@*
+
+//                             &&&&&&&&&&&&&&&&&&&&&&&&@
+//                           &&&((((((((((((((((((((%%%&&&
+//                         @&&(((  ((&((((((((((&&%%%%%%%&&.
+//                        &&(     (#&&(##((((((((&&%%%%%%%&&&
+//                      &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+//                      &&##(((((#&&(((((((%%%%%%%%&&%%%%%%%&&&
+//                       &&&####((@&&((((((%%%%%%%&&%%%%%%%&&&
+//                         &&&####(&&&(((((%%%%%%&&&%%%%%&&&
+//                           #&&%###&&(((((%%%%%&&&%%%&&&
+//                              &&@##&&##((%%%%%&&%%&&&
+//                                &&&#&&###%%%%&&%&&&
+//                           (.     &&&&&##%%%&&&&&     #(
+//                           ((       &&&%#%%&&&@       ((
+//                                      @&&&&&&
+//
+
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.22;
 
 import "erc721a/contracts/ERC721A.sol";
 import "@openzeppelin/contracts/token/common/ERC2981.sol";
@@ -189,49 +244,24 @@ contract NFTContractTemplate is ERC721A, ERC2981 {
         returns (uint256)
     {
         require(ERC721A._totalMinted() < maxSupply, "MAX_NFT_SUPPLY_EXHAUSTED");
-        require(msg.value >= mintPriceInWei, "INSUFFICIENT_FUNDS_SENT");
+        require(
+            msg.value == mintPriceInWei,
+            "FUNDS_SENT_MUST_BE_EQUAL_TO_MINT_PRICE"
+        );
 
         uint256 tokenID = ERC721A._totalMinted() + startTokenId;
         ERC721A._safeMint(msg.sender, 1);
         return tokenID;
     }
 
-    /**
-     * @dev can be called by whitelisted people to re-mint asset
-     * on this chain after burning somewhere else
-     */
-    function reMint(
-        address receiver
-    ) external atleastModerator returns (uint256) {
-        require(ERC721A._totalMinted() < maxSupply, "MAX_NFT_SUPPLY_EXHAUSTED");
-
-        uint256 tokenID = ERC721A._totalMinted() + startTokenId;
-        ERC721A._safeMint(receiver, 1);
-        return tokenID;
-    }
-
-    /**
-     * @dev call this to burn a single NFT
-     * @notice true value in _burn() call.
-     *          True means either you must be the owner
-     *          of that asset or approved for it.
-     * @dev emits Transfer
-     */
-    function burn(uint256 tokenID) public {
-        ERC721A._burn(tokenID, true);
-    }
-
-    /**
-     * @dev call it to query the total burned NFTs to date
-     * @notice calls the built-in _totalBurned() to get state
-     * @notice _totalBurned() is internal
-     */
-    function totalBurned() external view returns (uint256) {
-        return ERC721A._totalBurned();
-    }
-
     function updateModerator(address newModerator) external onlyOwner {
+        require(
+            newModerator != address(0),
+            "NEW_MODERATOR_ADDRESS_MUST_BE_NON_ZERO"
+        );
+
         moderator = newModerator;
+        emit moderatorUpdate(moderator);
     }
 
     /**
@@ -264,7 +294,9 @@ contract NFTContractTemplate is ERC721A, ERC2981 {
      * @notice you need to be careful while passing an address. Only pass good address
      */
     function transferOwnership(address newOwner) external onlyOwner {
+        require(newOwner != address(0), "NEW_OWNER_ADDRESS_MUST_BE_NON_ZERO");
         owner = newOwner;
+        emit ownershipTransfer(owner);
     }
 
     /**
@@ -284,6 +316,7 @@ contract NFTContractTemplate is ERC721A, ERC2981 {
      */
     function setContractURI(string calldata _contractURI) external onlyOwner {
         contractURI = _contractURI;
+        emit contractUriUpdate(contractURI);
     }
 
     /**
@@ -376,7 +409,13 @@ contract NFTContractTemplate is ERC721A, ERC2981 {
      * @dev updates the address who can withdraw crypto funds from this contract
      */
     function updateBeneficiary(address _beneficiary) external onlyOwner {
+        require(
+            _beneficiary != address(0),
+            "BENEFICIARY_ADDRESS_MUST_BE_NON_ZERO"
+        );
+
         beneficiary = _beneficiary;
+        emit beneficiaryUpdate(beneficiary);
     }
 
     /**
@@ -457,12 +496,24 @@ contract NFTContractTemplate is ERC721A, ERC2981 {
     ) public onlyOwner {
         require(
             _royaltyFeesInBips >= 0 && _royaltyFeesInBips <= 10 * 100, // 10*100 = 10% as royalty fee is in Bips
-            "[ ERROR ]: Royalty cut is expected in the range of 0% to 10%"
+            "[ ERROR ]: ROYALITY_CUT_SHOULD_BE_IN_RANGE (0% to 10%)"
         );
+        require(_receiver != address(0), "RECEIVER_ADDRESS_MUST_BE_NON_ZERO");
+
         _setDefaultRoyalty(_receiver, _royaltyFeesInBips);
         royaltyFeesInBips = _royaltyFeesInBips;
 
         emit RoyaltyFeeUpdate(_receiver, _royaltyFeesInBips);
+    }
+
+    /**
+     * @dev Allows the current contract owner to renounce ownership, effectively making the contract ownerless.
+     * @dev The function sets the contract owner's address to address(0), making the contract ownerless.
+     * @notice Only the current contract owner can call this function.
+     * @notice Renouncing ownership will leave the contract without an owner, thereby it removes any functionality that is only available to the owner.
+     */
+    function renounceOwnership() public onlyOwner {
+        owner = address(0);
     }
 
     /**
@@ -503,6 +554,26 @@ contract NFTContractTemplate is ERC721A, ERC2981 {
     event nftSupplyUpdate(uint256);
 
     /**
+     * @dev Emitted when moderator is updated.
+     */
+    event moderatorUpdate(address);
+
+    /**
+     * @dev Emitted when nft contract uri is updated.
+     */
+    event contractUriUpdate(string);
+
+    /**
+     * @dev Emitted when beneficiary address is updated.
+     */
+    event beneficiaryUpdate(address);
+
+    /**
+     * @dev Emitted when ownership is transfered to new address.
+     */
+    event ownershipTransfer(address);
+
+    /**
      * @dev Emitted when the list of addresses 'toWhitelist' are whitelisted
      * @param toWhitelist The list of addresses whitelisted
      */
@@ -520,4 +591,3 @@ contract NFTContractTemplate is ERC721A, ERC2981 {
      */
     event ToggleFreeMintPause(bool isPaused);
 }
-
