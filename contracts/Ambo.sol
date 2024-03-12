@@ -28,17 +28,13 @@
                                                                                 
                                                                                 
 // //////((   //////,(/      /(///(,         //// .////////    /(///(*   */////////
-// @@@@@@@@@@ @@@@@@@@@@( (@@@@@@@@@@/       @@@@ *@@@@@@@@ /@@@@@@@@@@# @@@@@@@@@@
-// @@@(/,.@@@@@@@@*,.@@@&#@@@#     @@@@      @@@@ *@@@,,,, &@@@@    #,,,(   /@@@*  
-// @@@@@@@@&# @@@@@@@@@, *@@@.    .@@@@&     @@@@ *@@@@@@@ &@@@             /@@@*  
-// @@@*.      @@@@%@@@@@  (@@@@..@@@@@@.@@@,.@@@  *@@@%%%%% /@@@@..%@@@@%   /@@@*  
-// @@@*.      @@@@  *@@@,   .@@@@@@&*   *&@@@@@#  *@@@@@@@@   *&@@@@@&&     /@@@*  
-                                                                                
-                                                                                
-//               %@&       ,@@#    #@@@    @@@(  @@@@@@#   &@@@@@@@%               
-//               %@&      /@@.@(   #@,@.  ,@@@(  @@/  @@/  @*     /@               
-//               %@&     (@@../@%  #@@ @((@ @@(  @@(..@@(  @*     /@               
-//               %@@&&&%#@@,   #@@ #@@ &@@% @@(  @@&&@@%/  ,@@@&@@@*            
+//      ..:..   ..    ...  .......  .......  ......   ........    ..:.     ......    ...     ...       
+//    :JYJ77J~ ^55~  :557 ~5YJ7??7 ^5YJ7??? :5YY?JYJ!.??JYYY?J: !JYJ?YY?: .5YY??YJ7 .55?   .J55Y:      
+//    ~Y5?~^^. ^5YJ!!?YY7 ~5Y?~!!. ^5Y?~!!: :5Y7 .?55:  :5Y7   J5Y:   ?55:.YYJ  755^.5Y?  .J5!!5Y.     
+//     ::^!J55:^5Y?^^7Y57 ~5Y7^^~. ^5Y?^^~: :5YYJYYY^   :557   J5Y:   ?55:.YYYJJJ?~ .5Y?  J557755Y.    
+//    ^J???JY7 ^55~  :5Y7 ~5YJ???? :5YJ???J.:5Y7 ~YY~   :5Y7    ~JYJJYY7: .YYJ      .YY7 ?5J::::J5J.   
+//      ....    ..    ..   . .....  . .....  ..    ..    ..        ...     ..        ..  ..      ..    
+                                                                                                 
                                                                         
                                                                                 
 // SPDX-License-Identifier: MIT
@@ -123,15 +119,15 @@ contract AMBO is ERC20, ERC20Permit, ERC20Votes, ERC20Burnable, Ownable {
     function setMaxHoldLimit(uint256 _value) external _moderatorOrOwner {
         require(
             _value >= totalSupply() / 100,
-            "LIMIT ShOULD BE ATLEAST ONE PERCENT OF TOTAL SUPPLY"
+            "LIMIT SHOULD BE ATLEAST 1 PERCENT OF TOTAL SUPPLY"
         );
         maxHoldLimit = _value;
     }
 
     function setMaxTxnLimit(uint256 _value) external _moderatorOrOwner {
         require(
-            _value >= totalSupply() / 100000,
-            "LIMIT ShOULD BE ATLEAST ONE PERCENT OF TOTAL SUPPLY"
+            _value >= totalSupply() / 10000,
+            "LIMIT SHOULD BE ATLEAST 0.01 PERCENT OF TOTAL SUPPLY"
         );
 
         maxTxnLimit = _value;
