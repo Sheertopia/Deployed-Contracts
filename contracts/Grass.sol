@@ -45,11 +45,11 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract GRAB is ERC20, ERC20Burnable, Ownable(msg.sender) {
+contract GRASS is ERC20, ERC20Burnable, Ownable(msg.sender) {
     mapping(address => bool) private antiBot;
     bool public tradingEnabled = false;
 
-    constructor() ERC20("GRAB", "GRAB") {
+    constructor() ERC20("GRASS", "GRASS") {
         antiBot[msg.sender] = true;
         _mint(msg.sender, 42_000_000 * 10 ** decimals());
     }
