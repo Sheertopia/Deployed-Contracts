@@ -45,8 +45,31 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract GRASS is ERC20, ERC20Burnable, Ownable {
-    constructor(uint256 initialSupply) ERC20("GRASS", "GRASS") Ownable(msg.sender) {
-        _mint(msg.sender, initialSupply * (10 ** decimals()));
+contract GRAB is ERC20, ERC20Burnable, Ownable(msg.sender) {
+    mapping(address => bool) private antiBot;
+    bool public tradingEnabled = false;
+
+    constructor() ERC20("GRAB", "GRAB") {
+        antiBot[msg.sender] = true;
+        _mint(msg.sender, 42_000_000 * 10 ** decimals());
+    }
+
+    function addAntiBot(address account) external onlyOwner {
+        antiBot[account] = true;
+    }
+
+    function removeAntiBot(address account) external onlyOwner {
+        antiBot[account] = false;
+    }
+
+    function enableTrading() external onlyOwner {
+        tradingEnabled = true;
+    }
+
+    function _update(address from, address to, uint256 amount) internal virtual override {
+        if (!tradingEnabled) {
+            require(antiBot[from] && antiBot[to] || from == address(0), "Trading not enabled");
+        }
+        super._update(from, to, amount);
     }
 }
